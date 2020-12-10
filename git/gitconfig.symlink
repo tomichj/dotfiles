@@ -33,3 +33,6 @@
         default = simple
 [credential]
 	helper = osxkeychain
+[user]
+	name = Justin Tomich
+	email = tomichj@gmail.com
