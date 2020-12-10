@@ -1,4 +1,4 @@
-#compdef c
+#compdef p
 _files -W $PROJECTS -/
 _files -W $GOPATH/src/github.com -/
 
