@@ -1,0 +1,8 @@
+#
+# If FileVault is enabled on your Mac, you can store an unlock key in memory and bypass FileVault
+# on the next restart by executing one of the below commands: (must be administrator to execute;
+# requires admin password)
+#
+# https://discussions.apple.com/thread/8496593
+#
+sudo fdesetup authrestart
