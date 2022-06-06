@@ -1,0 +1,96 @@
+#!/usr/bin/env ruby
+
+# an easier-to-use kill
+#
+# It offers me two main features: (1) I don’t have to know the pid. murder node, for example, saves you a step (2) it starts by asking nicely with SIGTERM, waits a bit, and then gets more and more “aggressive” before eventually sending SIGKILL. It’s a simple script but I use it when a process really needs to be shut down.
+#
+#  usage:
+#  murder 123    # kill by pid
+#  murder ruby   # kill by process name
+#  murder :3000  # kill by port'
+
+# See:
+# https://evanhahn.com/a-decade-of-dotfiles/
+# https://gitlab.com/EvanHahn/dotfiles/-/blob/ece393e625bb8254fe05774df33bb5af8a73d7e7/home/bin/bin/murder
+
+SIGNALS = [
+  [15, 3],
+  [2, 3],
+  [1, 4],
+  [9, 0]
+]
+
+def i?(arg)
+  arg.to_i != 0
+end
+
+def running?(pid)
+  `ps -p #{pid}`.lines.length == 2
+end
+
+def go_ahead?
+  %w(y yes yas).include? $stdin.gets.strip.downcase
+end
+
+def kill(pid, code)
+  `kill -#{code} #{pid}`
+end
+
+def murder_pid(pid)
+  SIGNALS.each do |signal|
+    break unless running? pid
+
+    code, wait = signal
+
+    kill(pid, code)
+    sleep 0.5
+    sleep(wait) if running? pid
+  end
+end
+
+def murder_names(name)
+  running = `ps -eo 'pid command' | grep -Fiw '#{name}' | grep -Fv grep`
+  running.lines.each do |line|
+    pid, fullname = line.split(nil, 2)
+
+    next if Process.pid == pid.to_i
+
+    print "murder #{fullname.chomp} (pid #{pid})? "
+    murder_pid(pid) if go_ahead?
+  end
+end
+
+def murder_port(arg)
+  lsofs = `lsof -i #{arg}`
+  lsofs.lines.drop(1).each do |line|
+    pid = line.split(nil, 3)[1]
+
+    fullname = `ps -eo 'command' #{pid}`.lines.drop(1).first
+
+    print "murder #{fullname.chomp} (pid #{pid})? "
+    murder_pid(pid) if go_ahead?
+  end
+end
+
+def main(arg)
+  is_pid = i?(arg)
+  is_port = arg[0] == ':' && i?(arg.slice(1, arg.size))
+
+  if is_pid
+    murder_pid arg
+  elsif is_port
+    murder_port arg
+  else
+    murder_names arg
+  end
+end
+
+if ARGV.size < 1
+  puts 'usage:'
+  puts 'murder 123    # kill by pid'
+  puts 'murder ruby   # kill by process name'
+  puts 'murder :3000  # kill by port'
+  exit 1
+else
+  main(ARGV[0])
+end
