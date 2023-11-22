@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#
+# Returns the pids of all processes matching $1
+#
+
+ps auxwww | grep "$1" | grep -v grep | cut -b 18-22

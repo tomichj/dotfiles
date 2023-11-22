@@ -2,12 +2,15 @@
 
 # an easier-to-use kill
 #
-# It offers me two main features: (1) I don’t have to know the pid. murder node, for example, saves you a step (2) it starts by asking nicely with SIGTERM, waits a bit, and then gets more and more “aggressive” before eventually sending SIGKILL. It’s a simple script but I use it when a process really needs to be shut down.
+# It offers me two main features: (1) I don’t have to know the pid. murder node, 
+# for example, saves you a step (2) it starts by asking nicely with SIGTERM, 
+# waits a bit, and then gets more and more “aggressive” before eventually sending 
+# SIGKILL. It’s a simple script but I use it when a process really needs to be shut down.
 #
 #  usage:
-#  murder 123    # kill by pid
-#  murder ruby   # kill by process name
-#  murder :3000  # kill by port'
+#  % murder 123    # kill by pid
+#  % murder ruby   # kill by process name
+#  % murder :3000  # kill by port'
 
 # See:
 # https://evanhahn.com/a-decade-of-dotfiles/

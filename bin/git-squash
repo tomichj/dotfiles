@@ -24,13 +24,18 @@
 #
 #
 
-while getops ":h" option; do
-	case $option in
-		h) #display Help
-			Help
-			exit;;
-	esac
-done
+
+OPTIONS_SPEC="\
+Squash some git commits using interactive rebase.
+Will open an interactive rebase for all commits that
+are not in your integration branch.
+
+Syntax: git squash [integration-branch-name]
+
+If no integration-branch-name is supplied, then main will be assumed.
+A remote branch can be specified as the integration branch, for 
+example 'git squash origin/main' is legal.
+"
 
 
 integration_branch=${1:-main}
