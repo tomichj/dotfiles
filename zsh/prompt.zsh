@@ -43,7 +43,7 @@ need_push () {
 
     if [[ $number == 0 ]]
     then
-      echo " "
+      echo ""
     else
       echo " with %{$fg_bold[magenta]%}$number unpushed%{$reset_color%}"
     fi
@@ -67,7 +67,7 @@ battery_status() {
   fi
 }
 
-export PROMPT=$'\n$(directory_name)$(git_dirty)$(need_push) › '
+export PROMPT=$'$(directory_name)$(git_dirty)$(need_push) › '
 
 # export PROMPT=$'\n$(battery_status)in $(directory_name) $(git_dirty)$(need_push)\n› '
 set_prompt () {
