@@ -1,0 +1,5 @@
+escape ^pp
+
+defscrollback 10000
+
+caption always "%{= 3b} %t %{= kk}${= bc} %H %{= kb} %{= kc} %C%a %{= kg} %{= kr}[ ${= ky} %w ${= ky}${= kr}] ${=kk}"
