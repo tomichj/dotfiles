@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+    echo "Usage: git-worktree-init <repo-url> [directory]"
+    echo
+    echo "Initialize a git worktree in the specified repository."
+    echo "If no directory is specified, the repo will be created under the current directory."
+    echo "Assumes the main branch is 'main' and already exists."
+    echo "Creates a worktee of the main branch."
+    echo
+    echo "Examples:"
+    echo "  git-worktree-init https://github.com/user/repo.git /path/to/worktree"
+    echo "  git-worktree-init https://github.com/user/repo.git"
+    echo
+    exit 1
+fi
+
+REPO_URL="$1"
+DIRECTORY="${2:-.}"
+
+if [ ! -d "$DIRECTORY" ]; then
+    mkdir -p "$DIRECTORY"
+fi
+
+cd "$DIRECTORY" || exit
+
+# Clone the bare repository if it doesn't exist
+if [ ! -d "$DIRECTORY/.bare" ]; then
+    git clone --bare "$REPO_URL" "$DIRECTORY/.bare"
+fi
+
+# create a .git file that points to the bare repository
+if [ ! -f "$DIRECTORY/.git" ]; then
+    echo "gitdir: ./.bare" > "$DIRECTORY/.git"
+fi
+
+# Create a new worktree of the main
+git worktree add main main
+
+#git worktree add -b new-branch "$DIRECTORY/new-branch" origin/main
