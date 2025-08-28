@@ -9,14 +9,24 @@ if [ "$#" -eq 0 ]; then
     echo "Creates a worktee of the main branch."
     echo
     echo "Examples:"
-    echo "  git-worktree-init https://github.com/user/repo.git /path/to/worktree"
-    echo "  git-worktree-init https://github.com/user/repo.git"
+    echo "  git-worktree-init https://github.com/user/repo /path/to/worktree"
+    echo "  git-worktree-init https://github.com/user/repo"
     echo
     exit 1
 fi
 
+
 REPO_URL="$1"
-DIRECTORY="${2:-.}"
+if [ -n "$2" ]; then
+    DIRECTORY="$2"
+else
+    # Extract repo name from REPO_URL, remove .git if present
+    REPO_NAME=$(basename "$REPO_URL" .git)
+    DIRECTORY="$REPO_NAME"
+fi
+
+echo "Initializing git worktree in directory: $DIRECTORY"
+echo "Using repository URL: $REPO_URL"
 
 if [ ! -d "$DIRECTORY" ]; then
     mkdir -p "$DIRECTORY"
@@ -25,13 +35,16 @@ fi
 cd "$DIRECTORY" || exit
 
 # Clone the bare repository if it doesn't exist
-if [ ! -d "$DIRECTORY/.bare" ]; then
-    git clone --bare "$REPO_URL" "$DIRECTORY/.bare"
+if [ ! -d ".bare" ]; then
+    git clone --bare "$REPO_URL" ".bare"
+else
+    echo "Bare repository already exists at $DIRECTORY/.bare"
+    exit
 fi
 
 # create a .git file that points to the bare repository
-if [ ! -f "$DIRECTORY/.git" ]; then
-    echo "gitdir: ./.bare" > "$DIRECTORY/.git"
+if [ ! -f ".git" ]; then
+    echo "gitdir: ./.bare" > ".git"
 fi
 
 # Create a new worktree of the main
