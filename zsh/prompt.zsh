@@ -29,8 +29,9 @@ git_dirty() {
 
 git_prompt_info () {
  ref=$($git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
+ # echo "%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%}"
+ # If you want to add color, use Zsh color vars and wrap in %{...%}
+ echo "%{${fg_bold[yellow]}%}${ref#refs/heads/}%{$reset_color%}"
 }
 
 # This assumes that you always have an origin named `origin`, and that you only
