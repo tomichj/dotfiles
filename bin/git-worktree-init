@@ -9,7 +9,7 @@ if [ "$#" -eq 0 ]; then
     echo "Creates a worktee of the main branch."
     echo
     echo "Examples:"
-    echo "  git-worktree-init https://github.com/user/repo /path/to/worktree"
+    echo "  git-worktree-init https://github.com/user/repo /path/to/worktree/root"
     echo "  git-worktree-init https://github.com/user/repo"
     echo
     exit 1
@@ -49,5 +49,10 @@ fi
 
 # Create a new worktree of the main
 git worktree add main main
+
+cd .bare || exit
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+git fetch origin
+cd .. || exit
 
 #git worktree add -b new-branch "$DIRECTORY/new-branch" origin/main
