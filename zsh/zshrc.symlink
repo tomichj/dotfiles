@@ -37,7 +37,15 @@ done
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
-compinit
+# Use unsafe option to avoid failures from stale zcompdump files that reference
+# completions from old Homebrew locations (e.g. /usr/local on Apple Silicon).
+# If you prefer, remove stale dumps manually: rm -f ~/.zcompdump*
+if [[ -f ~/.zcompdump* ]]; then
+  # Try to regenerate the dump without requiring secure directories
+  compinit -u 2>/dev/null || compinit
+else
+  compinit -u 2>/dev/null || compinit
+fi
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}

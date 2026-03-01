@@ -5,6 +5,35 @@
         protocol = https
 [alias]
         co = checkout
+        co = checkout
+        ci = commit
+        st = status
+
+        # *********************
+        # Logging and branches
+        bruh = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+        hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+        lol = log --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+        cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|main' | xargs -n 1 -r git branch -d"
+
+        # *********************
+        # What is 'trunk'?
+        # Main or Master?; Upstream or origin?
+        mainbranch = "!git remote show origin | sed -n '/HEAD branch/s/.*: //p'"
+        mainremote = "!echo $((git remote get-url upstream > /dev/null 2>&1 && echo 'upstream') || (git remote get-url origin > /dev/null 2>&1 && echo 'origin'))"
+        enterprisehost = "!echo 'your.enterprise.host'"
+        trunk = "!git co $(git mainbranch)"  # goto main or master
+
+        # *********************
+        # Rebase workflow
+        synced = "!git pull $((git remote get-url upstream > /dev/null 2>&1 && echo 'upstream') || (git remote get-url origin > /dev/null 2>&1 && echo 'origin')) $(git mainbranch)  --rebase"
+        update = "!git pull origin $(git rev-parse --abbrev-ref HEAD) --rebase"  # Update current branch with remote
+        squash = "!git rebase -v -i $(git mainbranch)"
+        publish = push origin HEAD --force-with-lease 
+        pub = publish 
+
         promote = !$ZSH/bin/git-promote
         wtf     = !$ZSH/bin/git-wtf
         rank-contributors = !$ZSH/bin/git-rank-contributors
