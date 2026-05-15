@@ -12,7 +12,7 @@ export LANGUAGE='en_US.UTF-8'
 
 export PAGER=less
 
-export LESS='--ignore-case --QUIET --raw-control-chars --no-init --quit-if-one-screen'
+export LESS='--ignore-case --QUIET --raw-control-chars'
 export LESSHISTFILE="$XDG_CACHE_HOME/lesshst"
 export LESSSECURE=1
 
