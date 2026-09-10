@@ -1,3 +1,8 @@
 #!/bin/bash
 
+echo "Current claude version:"
+claude -version
+echo "Upgrading claude..."
 npm install -g @anthropic-ai/claude-code@latest
+echo "New claude version:"
+claude -version
