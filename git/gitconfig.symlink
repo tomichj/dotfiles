@@ -31,8 +31,8 @@
         synced = "!git pull $((git remote get-url upstream > /dev/null 2>&1 && echo 'upstream') || (git remote get-url origin > /dev/null 2>&1 && echo 'origin')) $(git mainbranch)  --rebase"
         update = "!git pull origin $(git rev-parse --abbrev-ref HEAD) --rebase"  # Update current branch with remote
         squash = "!git rebase -v -i $(git mainbranch)"
-        publish = push origin HEAD --force-with-lease 
-        pub = publish 
+        publish = push origin HEAD --force-with-lease
+        pub = publish
 
         promote = !$ZSH/bin/git-promote
         wtf     = !$ZSH/bin/git-wtf
@@ -48,10 +48,6 @@
         editor = emacs
 [apply]
         whitespace = nowarn
-[mergetool]
-        keepBackup = false
-[difftool]
-        prompt = false
 [help]
         autocorrect = 1
 [push]
@@ -66,4 +62,38 @@
   command = /opt/homebrew/bin/spaceman-diff
 [init]
 	defaultBranch = main
+[mergedock "git-integration"]
+	previousDiffTool = missing
 
+	previousDiffGUITool = missing
+	previousDifftoolCommand = missing
+	previousDifftoolPrompt = missing
+	previousDifftoolTrustExitCode = missing
+	previousMergeTool = missing
+	previousMergeGUITool = missing
+	previousMergetoolCommand = missing
+	previousMergetoolTrustExitCode = missing
+	previousMergetoolPrompt = missing
+	previousMergetoolKeepBackup = missing
+[diff]
+	tool = mergedock
+	guitool = mergedock
+
+[difftool "mergedock"]
+	cmd = /bin/zsh \"/Applications/MergeDock.app/Contents/Resources/mergedock\" compare \"$LOCAL\" \"$REMOTE\" --git-file-display-name \"$MERGED\" --git-repo-root \"$PWD\" --git-file-diff --read-only --wait
+
+[difftool]
+	prompt = false
+	trustExitCode = true
+
+[merge]
+	tool = mergedock
+	guitool = mergedock
+
+[mergetool "mergedock"]
+	cmd = /bin/zsh \"/Applications/MergeDock.app/Contents/Resources/mergedock\" mergetool \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\" --git-file-display-name \"$MERGED\" --git-repo-root \"$PWD\" --wait
+	trustExitCode = true
+
+[mergetool]
+	prompt = false
+	keepBackup = false
